@@ -13,7 +13,7 @@ class Fred:
         """
 
         self.api_key = api_key
-        self.base_url = "https://api.stlouisfed.org/fred/"
+        self.base_url = 'https://api.stlouisfed.org/fred/'
 
     def json_series(self, series_id):
 
@@ -27,7 +27,7 @@ class Fred:
         - data (dict): JSON data for the specified FRED series.
         """
 
-        url = self.base_url + "series/observations?series_id=" + series_id + "&api_key=" + self.api_key + "&file_type=json"
+        url = self.base_url + 'series/observations?series_id=' + series_id + '&api_key=' + self.api_key + '&file_type=json'
         response = requests.get(url)
         data = json.loads(response.text)
         return data
@@ -64,16 +64,16 @@ class Fred:
         """
 
         series_ids = []
-        url = self.base_url + "series/search?api_key=" + self.api_key
+        url = self.base_url + 'series/search?api_key=' + self.api_key
         if search_text:
-            url += "&search_text=" + search_text
+            url += '&search_text=' + search_text.replace(' ', '+')
         if tag:
-            url += "&tag=" + tag
+            url += '&tag=' + tag.replace(' ', '+')
         if start_date:
-            url += "&observation_start=" + start_date
+            url += '&observation_start=' + start_date
         if end_date:
-            url += "&observation_end=" + end_date
-        url += "&file_type=json"
+            url += '&observation_end=' + end_date
+        url += '&file_type=json'
         response = requests.get(url)
         data = json.loads(response.text)
         if 'seriess' in data:
@@ -107,32 +107,32 @@ class Fred:
         - df (pd.DataFrame): Metadata for the matching FRED series as a Pandas DataFrame.
         """
         
-        url = self.base_url + "series/search?api_key=" + self.api_key
+        url = self.base_url + 'series/search?api_key=' + self.api_key
         if search_text:
-            url += "&search_text=" + search_text
+            url += '&search_text=' + search_text.replace(' ', '+')
         if search_type:
-            url += "&search_type=" + search_type
+            url += '&search_type=' + search_type
         if realtime_start:
-            url += "&realtime_start=" + realtime_start
+            url += '&realtime_start=' + realtime_start
         if realtime_end:
-            url += "&realtime_end=" + realtime_end
+            url += '&realtime_end=' + realtime_end
         if limit:
-            url += "&limit=" + str(limit)
+            url += '&limit=' + str(limit)
         if offset:
-            url += "&offset=" + str(offset)
+            url += '&offset=' + str(offset)
         if order_by:
-            url += "&order_by=" + order_by
+            url += '&order_by=' + order_by
         if sort_order:
-            url += "&sort_order=" + sort_order
+            url += '&sort_order=' + sort_order
         if filter_variable:
-            url += "&filter_variable=" + filter_variable
+            url += '&filter_variable=' + filter_variable
         if filter_value:
-            url += "&filter_value=" + filter_value
+            url += '&filter_value=' + filter_value
         if tag_names:
-            url += "&tag_names=" + tag_names
+            url += '&tag_names=' + tag_names
         if exclude_tag_names:
-            url += "&exclude_tag_names=" + exclude_tag_names
-        url += "&file_type=json"
+            url += '&exclude_tag_names=' + exclude_tag_names
+        url += '&file_type=json'
         response = requests.get(url)
         data = json.loads(response.text)
         data_frames = []
@@ -161,3 +161,37 @@ class Fred:
             return pd.concat(data_frames, ignore_index=True)
         else:
             return pd.DataFrame()
+        
+    def get_info(self):
+        """
+        Get all the methods in the Fred class and their descriptions.
+
+        Returns:
+        - methods (list): A list of dictionaries with method names and some info.
+        """
+        methods = []
+        for name in dir(self):
+            attr = getattr(self, name)
+            if callable(attr) and not name.startswith('__'):
+                docstring = attr.__doc__ or ''
+                method_info = {
+                    'Method': name,
+                    'Description': '',
+                    'Arguments': '',
+                    'Returns': ''
+                }
+                desc_start = docstring.find('Args:') or len(docstring)
+                desc = docstring[:desc_start].strip().replace('\n', ', ').strip(', ')
+                if desc and not desc.endswith(','):
+                    desc += ','
+                args_start = docstring.find('Args:')
+                args_end = docstring.find('Returns:') or len(docstring)
+                args = docstring[args_start:args_end].strip().replace('Args:', '').strip().replace('- ', '').strip(', ').replace('\n', ', ').strip(', ')
+                returns_start = docstring.find('Returns:')
+                returns = docstring[returns_start:].strip().replace('Returns:', '').strip().replace('- ', '').strip(', ').replace('\n', ', ').strip(', ')
+                method_info['Description'] = desc
+                method_info['Arguments'] = args
+                method_info['Returns'] = returns
+                methods.append(method_info)
+        methods = [m for m in methods if m['Method'] != 'get_info']
+        return methods
