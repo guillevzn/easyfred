@@ -1,8 +1,15 @@
-
+# Byte-compiled / optimized / DLL files
 .DS_Store
-test.py
-easyfred/__pycache__/
-info.txt
-build/
+__pycache__/
+*.pyc
+
+# Distribution / packaging
 dist/
-easyfred.egg-info/
+build/
+*.egg-info/
+
+# Installer log
+pip-log.txt
+
+# Unit test / coverage reports
+test.py
