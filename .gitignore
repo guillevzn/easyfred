@@ -1,4 +1,8 @@
 
 .DS_Store
-main.py
+test.py
 easyfred/__pycache__/
+info.txt
+build/
+dist/
+easyfred.egg-info/
