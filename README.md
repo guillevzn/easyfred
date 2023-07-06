@@ -5,7 +5,7 @@ This package is not inteded to substitute other (and more complete) packages to 
 
 Install via pip: ```pip install easyfred```
 
-Easy example usage:
+Example usage:
 
 ```
 import easyfred
@@ -22,8 +22,16 @@ With get_info() you can display all available methods in the library
 with their needed arguments and what will they return aech of these.
 """
 
-data = fred.search_and_get_all_series_metadata(search_text='GDP growth spain')
+metadata = fred.search_and_get_all_series_metadata(search_text='GDP growth spain')
 """
 This is an example of how you can get a specific table by searching with keywords.
+You get all available data in table format.
 """
+
+gdp_growth = fred.get_table('NAEXKP01ESQ657S')
+"""
+After you checked from the table what you wanted to get, or from the Fred
+link (it's the same series ID) you specify what table you want to get.
+"""
+
 ```
