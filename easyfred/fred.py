@@ -46,6 +46,7 @@ class Fred:
 
         data = self.json_series(series_id)
         df = pd.json_normalize(data['observations'])
+        df.value = pd.to_numeric(df.value, errors='coerce')
         return df
 
     def search_and_get_all_series_ids(self, search_text=None, tag=None, start_date=None, end_date=None):
