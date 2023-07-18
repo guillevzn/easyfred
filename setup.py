@@ -18,7 +18,7 @@ setup(
     author_email="<guillevzn@gmail.com>",
     description=DESCRIPTION,
     packages=find_packages(),
-    install_requires=['pandas'],
+    install_requires=['pandas', 'requests', 'json'],
     keywords=['python', 'fred', 'database', 'API' ],
     classifiers=[
         "Development Status :: 1 - Planning",
